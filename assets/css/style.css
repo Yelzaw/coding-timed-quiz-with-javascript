@@ -29,9 +29,13 @@
     font-size: 1.5em;
     text-align:center;
     font-weight: bold;
+    margin: 10%;    
   }
 
   .instruction {
     font-size: 1em;
   }
 
+  .start-button {
+    width: 100px;
+  }

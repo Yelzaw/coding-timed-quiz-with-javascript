@@ -2,10 +2,12 @@ var highScore = document.querySelector(".highScore");
 var startButton = document.querySelector(".start-button");
 
 var quizQuest = document.querySelector(".quiz-area");
+var statmentOfanswer = document.querySelector(".statement");
 
 var timerElement = document.querySelector(".timer-count");
 var timerCount;
 var timer;
+var isWin = false;
 
 var questions = ["What is your name?","How old are you?","What is your status?"]
 var answers = ["Yel","45","Married"]
@@ -15,9 +17,11 @@ const multipleChoice = {
     age: ["40","43","45","48"],
     stat: ["Single","Complicated","Seperated","Married"]
 }
+
 var chosenQuestion="";
 var correctAnswer;
 var quesTion= 0;
+var questionLength = 0;
 
 var listBtn = document.createElement("label")
 var but1 = document.createElement("button")
@@ -42,13 +46,18 @@ function btnGroup0(list) {
 }
 
 function showQuizs0() {
-  var j = 0;
-  chosenQuestion = questions[j];
-  correctAnswer = answers[j];
-  quizQuest.textContent = chosenQuestion;
-  quesTion = typeOfquest[j];
-  btnGroup0(quesTion)
   btnFormat()
+  if (questionLength<=2){
+    var j=questionLength;
+    chosenQuestion = questions[j];
+    correctAnswer = answers[j];
+    quizQuest.textContent = chosenQuestion;
+    quesTion = typeOfquest[j];    
+  }
+  else {
+    return
+  }
+  btnGroup0(quesTion) 
 }
 
 function startTimer() {
@@ -59,18 +68,18 @@ function startTimer() {
       if (timerCount >= 0) {
         // console.log(timerCount);
         // Tests if win condition is met
-        // if (isWin && timerCount > 0) {
-        //   // Clears interval and stops timer
-        //   clearInterval(timer);
-        //   winGame();
-        
+        if (isWin && timerCount > 0) {
+          // Clears interval and stops timer
         }
-      
+      }
       // Tests if time has run out
-      if (timerCount === 0) {
+      if (timerCount === 0 || questionLength==3) {
         // Clears interval
         clearInterval(timer);
         // loseGame();
+        quizQuest.textContent="You made it.";
+        statmentOfanswer.setAttribute("style","display:none")
+
       }
     }, 1000);
   }
@@ -80,13 +89,31 @@ function startGame(){
     startTimer()
     showQuizs0()
 }
+
 function checkAnswer(i){
+  var isCorrect=false;
   if(multipleChoice[quesTion][i]===correctAnswer){
     console.log("You are correct.");
+    statmentOfanswer.textContent="Correct";
+    statmentOfanswer.setAttribute("style","display:flex")
+    isCorrect=true;
   }
-  else {console.log("Nice try, incorrect.")}
-
+  else {
+    console.log("Nice try, incorrect.");
+    statmentOfanswer.textContent="Nice try, incorrect";
+    statmentOfanswer.setAttribute("style","display:flex")
+  };
+  questionLength++;
+  showQuizs0()
+  // if (questionLengt<=3) {
+  //   
+  //   showQuizs0()
+  // }
+  // else {
+  // quizQuest.textContent="You completed.";
+  // }
 }
+
 function but1Button(){
   choseButton = 0;
   console.log(correctAnswer);
@@ -113,6 +140,6 @@ function but4Button(){
 }
 startButton.addEventListener("click", startGame);
 but1.addEventListener("click",but1Button);
-but2.addEventListener("click",but1Button);
-but2.addEventListener("click",but1Button);
-but2.addEventListener("click",but1Button);
+but2.addEventListener("click",but2Button);
+but3.addEventListener("click",but3Button);
+but4.addEventListener("click",but4Button);

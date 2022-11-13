@@ -33,6 +33,15 @@
     margin-left: 30%;
     margin-right: 30%;
   }
+  .statement {
+    display:none;
+    font-size: 10px;
+    text-align: center;
+    margin-left: 30%;
+    margin-right: 30%;
+    padding-left:10px;
+    border-top: 2px solid lightslategray;
+  }
 
   .instruction {
     font-size: 1em;

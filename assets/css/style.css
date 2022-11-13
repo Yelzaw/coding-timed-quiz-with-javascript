@@ -1,0 +1,37 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: flex-start;
+  }
+
+  header {
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+    text-align: center;
+    border-bottom:30px #879274;
+  }
+
+  .timer-text {
+    display: flex;
+    justify-content: start;
+    padding-right: 10px;
+  }
+
+  .quiz-area    {
+    font-size: 1.5em;
+    text-align:center;
+    font-weight: bold;
+  }
+
+  .instruction {
+    font-size: 1em;
+  }
+

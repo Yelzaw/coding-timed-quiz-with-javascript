@@ -30,10 +30,12 @@ var questionLength = 0;
 var winCount=0;
 var compareWin=0;
 
-var backButn =document.createElement("button");
-backButn.setAttribute("class",".score-button")
-var resetButton = document.createElement("button");
-resetButton.setAttribute("class",".score-button")
+var backButn = document.getElementById("back");
+var resetButton = document.getElementById("reset");
+// var backButn =document.createElement("button");
+// backButn.setAttribute("class",".score-button")
+// var resetButton = document.createElement("button");
+// resetButton.setAttribute("class",".score-button")
 var saveButton = document.createElement("button");
 var textInputBox = document.createElement("input","type=text");
 var inputText = "";
@@ -146,27 +148,29 @@ function checkScore(){
   quizArea.appendChild(saveButton);
   
 }
-var subTitle = document.createElement("h2");
-var showScore = document.createElement("h4");
+// var subTitle = document.createElement("h2");
+// var showScore = document.createElement("h4");
+var subTitle = document.getElementById("title-scoreboard");
+var showScore = document.getElementById("show-scores");
 
 function recordHigh() {
   scoreBoard.setAttribute("style","display: block");
   
-  scoreBoard.appendChild(subTitle);
-  subTitle.textContent="Highest Score";
+  // scoreBoard.appendChild(subTitle);
+  // subTitle.textContent="Highest Score";
   var getLastScore=JSON.parse(localStorage.getItem("Highestscore"));
   if (getLastScore!==null){
   showScore.textContent = getLastScore.join(" ");
-  scoreBoard.appendChild(showScore);
-  scoreBoard.appendChild(backButn);
+  // scoreBoard.appendChild(showScore);
+  // scoreBoard.appendChild(backButn);
   } else {
     return;
   }
-  scoreBoard.appendChild(showScore);
-  scoreBoard.appendChild(backButn);
-  scoreBoard.appendChild(resetButton);
-  resetButton.textContent="Reset";
-  backButn.textContent="Back";
+  // scoreBoard.appendChild(showScore);
+  // scoreBoard.appendChild(backButn);
+  // scoreBoard.appendChild(resetButton);
+  // resetButton.textContent="Reset";
+  // backButn.textContent="Back";
 }
 
 function checkAnswer(i){
@@ -242,20 +246,21 @@ init();
 
 highScore.addEventListener("click",function(){
   initalState.setAttribute("style","display: none");
+  header.setAttribute("style","display:none");
   scoreBoard.setAttribute("style","display: block");
-  scoreBoard.appendChild(subTitle);
-  subTitle.textContent="Highest Score";
+  // scoreBoard.appendChild(subTitle);
+  // subTitle.textContent="Highest Score";
   var getLastScore=JSON.parse(localStorage.getItem("Highestscore"));
   if (getLastScore!==null){
     showScore.textContent = getLastScore.join(" ");
-    scoreBoard.appendChild(showScore);
-    scoreBoard.appendChild(backButn);    
-  scoreBoard.appendChild(resetButton);
+    // scoreBoard.appendChild(showScore);
+  //   scoreBoard.appendChild(backButn);    
+  // scoreBoard.appendChild(resetButton);
     } else {
       return;
     }
-  backButn.textContent="Back";
-  resetButton.textContent="Reset";
+  // backButn.textContent="Back";
+  // resetButton.textContent="Reset";
 })
 saveButton.addEventListener("click",function(){
   inputText = textInputBox.value.trim();

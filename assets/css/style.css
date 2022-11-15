@@ -72,19 +72,25 @@
 
   .score-button {
     width:auto; 
-    margin:20px; 
+    margin:0 4px; 
     text-align: center;
-    display: revert;
   }
 
   .score-board   {
-    display: block;
+    display: none;
     font-size: 1.5em;
     text-align:center;
     font-weight: bold;
     margin-top: 10%;
     margin-left: 30%;
     margin-right: 30%;
+  }
+
+  .scores-button {
+    display: inline-block;
+    justify-content: space-around;
+    width: 300px;
+    align-items: center;
   }
 
   form {

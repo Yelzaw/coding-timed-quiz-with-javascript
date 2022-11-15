@@ -4,7 +4,8 @@ var header=document.querySelector("header");
 var scoreBoard=document.querySelector(".score-board")
 
 var initalState = document.getElementById("initial-state"); 
-var quizQuest = document.querySelector(".quiz-state")//
+var quizQuest = document.querySelector(".quiz-state")
+var quizArea = document.querySelector(".quiz-area")
 var statmentOfanswer = document.querySelector(".statement");//
 
 var timerElement = document.querySelector(".timer-count");
@@ -29,7 +30,7 @@ var questionLength = 0;
 var winCount=0;
 
 var backButn =document.createElement("button");
-var recordButton = document.createElement("button");
+var saveButton = document.createElement("button");
 var textInputBox = document.createElement("input","type=text");
 var inputText = "";
 
@@ -98,11 +99,14 @@ function startTimer() {
         clearInterval(timer);
         // EndGame;
         if (timerCount ===0){
-          quizQuest.textContent="Sorry, Time up!";
+          quizQuest.setAttribute("style","display: none");
+          quizArea.setAttribute("style","display:block");
+          quizArea.textContent="Sorry, Time up!";
         }
         else {
-          listBtn.setAttribute("style","display: none");
-          quizQuest.textContent="You answered all questions. Awesome!";
+          quizQuest.setAttribute("style","display: none");
+          quizArea.setAttribute("style","display:block");
+          quizArea.textContent="You answered all questions. Awesome!";
         }
         
         header.setAttribute("style","display:none")
@@ -127,14 +131,16 @@ function startGame(){
 }
 
 function checkScore(){
-  quizQuest.textContent="Your score is " + winCount+".";  
+  
+  quizArea.textContent="Your score is " + winCount+".";  
   var labelBox = document.createElement("form");
   labelBox.textContent="Initial  ";
   labelBox.setAttribute = ("style","font-size:small");  
-  quizQuest.appendChild(labelBox);
+  quizArea.appendChild(labelBox);
   labelBox.appendChild(textInputBox);
-  recordButton.textContent="Save";
-  quizQuest.appendChild(recordButton);  
+  saveButton.textContent="Save";
+  quizArea.appendChild(saveButton);
+  
 }
 var subTitle = document.createElement("h2");
 var showScore = document.createElement("h4");
@@ -155,27 +161,41 @@ function recordHigh() {
 function checkAnswer(i){
     
   if(multipleChoice[quesTion][i]===correctAnswer){
-    console.log("You are correct.");
     statmentOfanswer.textContent="Correct";
     statmentOfanswer.setAttribute("style","display:flex")
+    var timerCount2 = 3;
+    var timer2 = setInterval(function(){
+    timerCount2--;
+    if (timerCount2 === 0) {
+    clearInterval(timer2);    
+    statmentOfanswer.setAttribute("style","display:none")
+      }
+    },100);
     isCorrect=true;
     winCount = winCount+10;
   }
   else {
-    console.log("Nice try, incorrect.");
     statmentOfanswer.textContent="Nice try, incorrect";
     statmentOfanswer.setAttribute("style","display:flex")
+    var timerCount2 = 3;
+    var timer2 = setInterval(function(){
+    timerCount2--;
+    if (timerCount2 === 0) {
+    clearInterval(timer2);    
+    statmentOfanswer.setAttribute("style","display:none")
+      }
+    },100);
     timerCount = timerCount-5;
     timerElement.textContent = timerCount;    
   };
   console.log(winCount);
   questionLength++;
 
-  var timerCount2 = 3;
-  var timer2 = setInterval(function(){
-   timerCount2--;
-   if (timerCount2 === 0) {
-    clearInterval(timer2);
+  var timerCount3 = 3;
+  var timer3 = setInterval(function(){
+   timerCount3--;
+   if (timerCount3 === 0) {
+    clearInterval(timer3);
     showQuizs()
    }
   },100);
@@ -208,19 +228,20 @@ function but4Button(){
 }
 
 init();
-recordButton.addEventListener("click",function(){
-  inputText = textInputBox.value.trim();
 
+saveButton.addEventListener("click",function(){
+  inputText = textInputBox.value.trim();
   console.log(inputText);
   if (inputText === "") {
     return;
   }
-  if (inputText !== "") {
-  quizQuest.setAttribute("style","display: none");
+  
+  quizArea.setAttribute("style","display:none");
   var highScoreName = [inputText,"\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0",winCount];
   localStorage.setItem("Highestscore", JSON.stringify(highScoreName));
   recordHigh()
-  }
+  textInputBox.value="";
+
 });
 
 startButton.addEventListener("click", function(){
@@ -238,3 +259,16 @@ but1.addEventListener("click",but1Button);
 but2.addEventListener("click",but2Button);
 but3.addEventListener("click",but3Button);
 but4.addEventListener("click",but4Button);
+
+// Bonus: Add reset button
+// var resetButton = document.querySelector(".reset-button");
+
+// function resetGame() {
+//   // Resets win and loss counts
+//   winCounter = 0;
+//   loseCounter = 0;
+//   // Renders win and loss counts and sets them into client storage
+//   setWins()  
+// }
+// // Attaches event listener to button
+// resetButton.addEventListener("click", resetGame);

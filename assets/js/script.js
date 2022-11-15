@@ -1,6 +1,7 @@
 var highScore = document.querySelector(".highScore");
 var startButton = document.querySelector(".start-button");
 var header=document.querySelector("header");
+var scoreBoard=document.querySelector(".score-board")
 
 var initalState = document.getElementById("initial-state"); 
 var quizQuest = document.querySelector(".quiz-state")//
@@ -27,13 +28,28 @@ var questionLength = 0;
 
 var winCount=0;
 
+var backButn =document.createElement("button");
+var recordButton = document.createElement("button");
+var textInputBox = document.createElement("input","type=text");
+var inputText = "";
+
 var listBtn = document.createElement("label")
 var but1 = document.createElement("button")
 var but2 = document.createElement("button")
 var but3 = document.createElement("button")
 var but4 = document.createElement("button")
 
+function init() {
+  initalState.setAttribute("style","display:block");
+  chosenQuestion="";
+  correctAnswer;
+  quesTion= 0;
+  questionLength = 0;
+  winCount=0;
+}
+
 function btnFormat() {
+  listBtn.setAttribute("style","display: block");
   but1.setAttribute("style","width:auto; margin:10px; display:block; text-align: left");
   but2.setAttribute("style","width:auto; margin:10px; display:block; text-align: left");
   but3.setAttribute("style","width:auto; margin:10px; display:block; text-align: left");
@@ -48,6 +64,7 @@ function btnGroup0(list) {
   listBtn.appendChild(but4).textContent="4. "+multipleChoice[list][3];  
 }
 
+
 function showQuizs() {
   btnFormat()
   if (questionLength<=2){
@@ -55,7 +72,7 @@ function showQuizs() {
     chosenQuestion = questions[j];
     correctAnswer = answers[j];
     quizQuest.textContent = chosenQuestion;
-    quesTion = typeOfquest[j];    
+    quesTion = typeOfquest[j];
   }
   btnGroup0(quesTion)
 }
@@ -84,6 +101,7 @@ function startTimer() {
           quizQuest.textContent="Sorry, Time up!";
         }
         else {
+          listBtn.setAttribute("style","display: none");
           quizQuest.textContent="You answered all questions. Awesome!";
         }
         
@@ -109,13 +127,31 @@ function startGame(){
 }
 
 function checkScore(){
-  quizQuest.textContent="Your score is " + winCount+".";
-  localStorage.setItem("winCounter", winCount);
+  quizQuest.textContent="Your score is " + winCount+".";  
+  var labelBox = document.createElement("form");
+  labelBox.textContent="Initial  ";
+  labelBox.setAttribute = ("style","font-size:small");  
+  quizQuest.appendChild(labelBox);
+  labelBox.appendChild(textInputBox);
+  recordButton.textContent="Save";
+  quizQuest.appendChild(recordButton);  
 }
+var subTitle = document.createElement("h2");
+var showScore = document.createElement("h4");
 
 function recordHigh() {
+  scoreBoard.setAttribute("style","display: block");
   
+  scoreBoard.appendChild(subTitle);
+  subTitle.textContent="Highest Score";
+  var getLastScore=JSON.parse(localStorage.getItem("Highestscore"));
+  
+  showScore.textContent = "1. "+getLastScore.join(" ");
+  scoreBoard.appendChild(showScore);
+  scoreBoard.appendChild(backButn);
+  backButn.textContent="Back";
 }
+
 function checkAnswer(i){
     
   if(multipleChoice[quesTion][i]===correctAnswer){
@@ -146,7 +182,7 @@ function checkAnswer(i){
   
 }
 
-function but1Button(){
+function but1Button(){ 
   choseButton = 0;
   console.log(correctAnswer);
   console.log(quesTion);
@@ -170,10 +206,34 @@ function but4Button(){
   console.log(quesTion);
   checkAnswer(choseButton);
 }
+
+init();
+recordButton.addEventListener("click",function(){
+  inputText = textInputBox.value.trim();
+
+  console.log(inputText);
+  if (inputText === "") {
+    return;
+  }
+  if (inputText !== "") {
+  quizQuest.setAttribute("style","display: none");
+  var highScoreName = [inputText,"\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0",winCount];
+  localStorage.setItem("Highestscore", JSON.stringify(highScoreName));
+  recordHigh()
+  }
+});
+
 startButton.addEventListener("click", function(){
   initalState.setAttribute("style","display: none");
+  quizQuest.setAttribute("style","display:block");
   startGame()
 })
+backButn.addEventListener("click",function(){
+  init()
+  header.setAttribute("style","display:flex");
+  scoreBoard.setAttribute("style","display: none");
+  
+});
 but1.addEventListener("click",but1Button);
 but2.addEventListener("click",but2Button);
 but3.addEventListener("click",but3Button);

@@ -1,4 +1,4 @@
-var highScore = document.querySelector(".highScore");
+var highScore = document.querySelector(".highscore");
 var startButton = document.querySelector(".start-button");
 var header=document.querySelector("header");
 var scoreBoard=document.querySelector(".score-board")
@@ -28,8 +28,12 @@ var quesTion= 0;
 var questionLength = 0;
 
 var winCount=0;
+var compareWin=0;
 
 var backButn =document.createElement("button");
+backButn.setAttribute("class",".score-button")
+var resetButton = document.createElement("button");
+resetButton.setAttribute("class",".score-button")
 var saveButton = document.createElement("button");
 var textInputBox = document.createElement("input","type=text");
 var inputText = "";
@@ -46,7 +50,7 @@ function init() {
   correctAnswer;
   quesTion= 0;
   questionLength = 0;
-  winCount=0;
+  compareWin =winCount;
 }
 
 function btnFormat() {
@@ -66,7 +70,7 @@ function btnGroup0(list) {
 }
 
 
-function showQuizs() {
+function showQuizs() {  
   btnFormat()
   if (questionLength<=2){
     var j=questionLength;
@@ -151,10 +155,17 @@ function recordHigh() {
   scoreBoard.appendChild(subTitle);
   subTitle.textContent="Highest Score";
   var getLastScore=JSON.parse(localStorage.getItem("Highestscore"));
-  
-  showScore.textContent = "1. "+getLastScore.join(" ");
+  if (getLastScore!==null){
+  showScore.textContent = getLastScore.join(" ");
   scoreBoard.appendChild(showScore);
   scoreBoard.appendChild(backButn);
+  } else {
+    return;
+  }
+  scoreBoard.appendChild(showScore);
+  scoreBoard.appendChild(backButn);
+  scoreBoard.appendChild(resetButton);
+  resetButton.textContent="Reset";
   backButn.textContent="Back";
 }
 
@@ -229,20 +240,39 @@ function but4Button(){
 
 init();
 
+highScore.addEventListener("click",function(){
+  initalState.setAttribute("style","display: none");
+  scoreBoard.setAttribute("style","display: block");
+  scoreBoard.appendChild(subTitle);
+  subTitle.textContent="Highest Score";
+  var getLastScore=JSON.parse(localStorage.getItem("Highestscore"));
+  if (getLastScore!==null){
+    showScore.textContent = getLastScore.join(" ");
+    scoreBoard.appendChild(showScore);
+    scoreBoard.appendChild(backButn);    
+  scoreBoard.appendChild(resetButton);
+    } else {
+      return;
+    }
+  backButn.textContent="Back";
+  resetButton.textContent="Reset";
+})
 saveButton.addEventListener("click",function(){
   inputText = textInputBox.value.trim();
   console.log(inputText);
   if (inputText === "") {
     return;
   }
-  
+  setListBoard();
+});
+
+function setListBoard(){
   quizArea.setAttribute("style","display:none");
-  var highScoreName = [inputText,"\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0",winCount];
+  var highScoreName = ["1. "+inputText,"\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0",winCount];
   localStorage.setItem("Highestscore", JSON.stringify(highScoreName));
   recordHigh()
   textInputBox.value="";
-
-});
+}
 
 startButton.addEventListener("click", function(){
   initalState.setAttribute("style","display: none");
@@ -250,6 +280,7 @@ startButton.addEventListener("click", function(){
   startGame()
 })
 backButn.addEventListener("click",function(){
+  
   init()
   header.setAttribute("style","display:flex");
   scoreBoard.setAttribute("style","display: none");
@@ -261,14 +292,15 @@ but3.addEventListener("click",but3Button);
 but4.addEventListener("click",but4Button);
 
 // Bonus: Add reset button
-// var resetButton = document.querySelector(".reset-button");
 
-// function resetGame() {
-//   // Resets win and loss counts
-//   winCounter = 0;
-//   loseCounter = 0;
-//   // Renders win and loss counts and sets them into client storage
-//   setWins()  
-// }
-// // Attaches event listener to button
-// resetButton.addEventListener("click", resetGame);
+
+function resetScore() {
+  // Resets win and loss counts
+  winCount = 0;
+  inputText ="";
+  localStorage.setItem("Highestscore", JSON.stringify([]));
+  // Renders win and loss counts and sets them into client storage
+  recordHigh()  
+}
+// Attaches event listener to button
+resetButton.addEventListener("click", resetScore);

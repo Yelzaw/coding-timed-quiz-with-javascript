@@ -25,7 +25,17 @@
     padding-right: 10px;
   }
 
-  .quiz-area    {
+  #initial-state   {
+    display: block;
+    font-size: 1.5em;
+    text-align:center;
+    font-weight: bold;
+    margin-top: 10%;
+    margin-left: 30%;
+    margin-right: 30%;
+  }
+  .quiz-state   {
+    display: block;
     font-size: 1.5em;
     text-align:center;
     font-weight: bold;

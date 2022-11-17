@@ -18,4 +18,4 @@ MIT License
 
 - https://yelzaw.github.io/coding-timed-quiz-with-javascript/
 
-<img src="/assets/images/screenshot-of-portfolio.png" width="300" alt="Screenshot of webpage">
+<img src="/assets/img/webimage.png" width="300" alt="Screenshot of webpage">

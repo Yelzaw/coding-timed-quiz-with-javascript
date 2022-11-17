@@ -9,19 +9,27 @@ var startButton = document.querySelector(".start-button");
 var timerCount=0;
 var quizArea = document.querySelector(".quiz-area");
 var quizState = document.querySelector(".quiz-state");
-var inputNameForm = document.querySelector(".input-nameform");
+
 var scoreBoard = document.querySelector(".score-board");
+
+var codeQuestions = document.getElementById("quiz-questions");
+var chosenQuestion="";
+var correctAnswer;
+var quesTion= 0;
+var questionLength = 0;
+var winCount=0;
 
 function init() {
   initalState.setAttribute("style","display:block");
   quizArea.setAttribute("style","display:none");
   quizState.setAttribute("style","display:none");
-  scoreBoard.setAttribute("style","display:none");
+  // scoreBoard.setAttribute("style","display:none");
   chosenQuestion="";
   correctAnswer;
   quesTion= 0;
   questionLength = 0;
   timerElement.textContent = 0;  
+  winCount=0;
 }
 
 init();
@@ -42,15 +50,6 @@ function recordSave(event){
 }
 
 // 2nd step - start the Q & A section and show the time countdown
-
-
-var codeQuestions = document.getElementById("quiz-questions");
-var chosenQuestion="";
-var correctAnswer;
-var quesTion= 0;
-var questionLength = 0;
-var winCount=0;
-var compareWin=0;
 
 // Question and Answer
 var questions = ["Commonly used data types DO NOT include:","The condition in an if / else statement is enclosed with _____.","Arrays in JavaScript can be used to store ______.","String values must be enclosed within ____ when being assigned to variables.","A very useful tool used during development and debugging for printing content to the debugger is:"]
@@ -108,23 +107,20 @@ var responseAnswer = document.getElementById("response-answ");
 // Clocking the time
 var scoreState = document.getElementById("score-state");
 var timer;
-var isWin = false;
+var labelBox = document.createElement("form");
+labelBox.setAttribute("id","input-form");
 
 function startTimer() {
   timer = setInterval(function() {
     timerCount--;
     timerElement.textContent = timerCount;
-    if (timerCount >= 0) {
-      // If win condition is met, add the score
-      if (isWin && timerCount > 0) {
-        winCount++;
-      }
-    }
+
     // If timer or question has run out    
     if (timerCount === 0 || questionLength==5) {
       clearInterval(timer);
       quizArea.setAttribute("style","display: none");
       quizState.setAttribute("style","display:block");
+      labelBox.setAttribute("style","display:none");
       // EndGame;
       if (timerCount ===0){        
         scoreState.textContent="Sorry, Time up!";
@@ -214,34 +210,41 @@ function checkAnswer(i){
 }
 
 // 3. Display the total scores and text-box for user to record the name
-var textInputBox = document.createElement("input","type=text");
 var inputText = "";
-var saveButton = document.createElement("button");
 
-function checkScore(){  
+function checkScore(){    
+  var saveButton = document.createElement("button");
+  var textInputBox = document.createElement("input","type=text");  
   scoreState.textContent="Your score is " + winCount+".";  
   var labelBox = document.createElement("form");
   labelBox.textContent="Enter initials  :  ";
-  labelBox.setAttribute = ("style","font-size:small");  
+  labelBox.setAttribute("style","font-size:medium");  
   quizState.appendChild(labelBox);
   labelBox.appendChild(textInputBox);
   saveButton.textContent="Save";
   quizState.appendChild(saveButton);  
+
+  saveButton.addEventListener("click",function(){
+    inputText = textInputBox.value;
+    if (inputText === "") {
+      return;
+    }        
+    textInputBox.setAttribute("style","display:none");
+    labelBox.setAttribute("style","display:none");  
+    setListBoard();
+    saveButton.setAttribute("style","display:none");
+  });
+  
 }
 
-saveButton.addEventListener("click",function(){
-  inputText = textInputBox.value;
-  if (inputText === "") {
-    return;
-  }  
-  setListBoard();
-});
 
 function setListBoard(){  
+    
+  quizState.setAttribute("style","display:none");
   var highScoreName = ["1. "+inputText,"\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0",winCount];
   localStorage.setItem("Highestscore", JSON.stringify(highScoreName));
   recordHigh()
-  textInputBox.value="";
+  // textInputBox.value="";
   quizState.setAttribute("style","display:none");
 }
 
@@ -252,7 +255,7 @@ var backButn = document.getElementById("back");
 var resetButton = document.getElementById("reset");
 
 function recordHigh () {
-  header.setAttribute("style","display:none")
+  header.setAttribute("style","display:none");
   scoreBoard.setAttribute("style","display:block");
   var getLastScore=JSON.parse(localStorage.getItem("Highestscore"));
   if (getLastScore!==null){
@@ -261,13 +264,14 @@ function recordHigh () {
 }
 
 // Back to main page
-backButn.addEventListener("click",function(){  
-  init()
+
+function backMain(){  
   header.setAttribute("style","display:flex");
   highScore.setAttribute("style","display: block");
   scoreBoard.setAttribute("style","display: none");  
-});
-
+  init()
+}
+backButn.addEventListener("click",backMain);
 // Reset button to clear the score
 function resetScore() {
   winCount = 0;

@@ -7,22 +7,29 @@ var timerElement = document.querySelector(".timer-count");
 var initalState = document.getElementById("initial-state"); 
 var startButton = document.querySelector(".start-button"); 
 var timerCount=0;
+var quizArea = document.querySelector(".quiz-area");
+var quizState = document.querySelector(".quiz-state");
+var inputNameForm = document.querySelector(".input-nameform");
+var scoreBoard = document.querySelector(".score-board");
 
 function init() {
   initalState.setAttribute("style","display:block");
+  quizArea.setAttribute("style","display:none");
+  quizState.setAttribute("style","display:none");
+  scoreBoard.setAttribute("style","display:none");
   chosenQuestion="";
   correctAnswer;
   quesTion= 0;
   questionLength = 0;
-  compareWin =winCount;
-  timerElement.textContent = 0;
+  timerElement.textContent = 0;  
 }
 
 init();
 
 // Link to Scoreboard by clicking View high scores
+highScore.addEventListener("click",recordSave);
 
-highScore.addEventListener("click",function(){
+function recordSave(event){
   initalState.setAttribute("style","display: none");
   header.setAttribute("style","display:none");
   scoreBoard.setAttribute("style","display: block");
@@ -32,11 +39,12 @@ highScore.addEventListener("click",function(){
     } else {
       return;
     }
-})
+}
 
 // 2nd step - start the Q & A section and show the time countdown
 
-var quizArea = document.querySelector(".quiz-area");
+
+var codeQuestions = document.getElementById("quiz-questions");
 var chosenQuestion="";
 var correctAnswer;
 var quesTion= 0;
@@ -58,7 +66,8 @@ const multipleChoice = {
 
 startButton.addEventListener("click", function(){
   initalState.setAttribute("style","display: none");
-  quizQuest.setAttribute("style","display:block");
+  quizArea.setAttribute("style","display: block");
+  highScore.setAttribute("style","display: none");
   startGame()
 });
 
@@ -69,47 +78,35 @@ function startGame(){
   showQuizs()    
 }
 
-function showQuizs() {  
-  btnFormat()
+function showQuizs() {    
   if (questionLength<=4){
     var j=questionLength;
     chosenQuestion = questions[j];
     correctAnswer = answers[j];
-    quizQuest.textContent = chosenQuestion;
+    codeQuestions.textContent = chosenQuestion;
     quesTion = typeOfquest[j];
   }
   btnGroup0(quesTion)
 }
 
-// Buttons for Multiple Answers
-
-var listBtn = document.createElement("label")
-var but1 = document.createElement("button")
-var but2 = document.createElement("button")
-var but3 = document.createElement("button")
-var but4 = document.createElement("button")
-
-function btnFormat() {
-  listBtn.setAttribute("style","display: block");
-  but1.setAttribute("style","width:auto; margin:10px; display:block; text-align: left");
-  but2.setAttribute("style","width:auto; margin:10px; display:block; text-align: left");
-  but3.setAttribute("style","width:auto; margin:10px; display:block; text-align: left");
-  but4.setAttribute("style","width:auto; margin:10px; display:block; text-align: left"); 
-}
+var but1 = document.getElementById("but-1");
+var but2 = document.getElementById("but-2");
+var but3 = document.getElementById("but-3");
+var but4 = document.getElementById("but-4");
 
 function btnGroup0(list) {  
-  quizQuest.appendChild(listBtn);
-  listBtn.appendChild(but1).textContent=multipleChoice[list][0];
-  listBtn.appendChild(but2).textContent=multipleChoice[list][1];
-  listBtn.appendChild(but3).textContent=multipleChoice[list][2];
-  listBtn.appendChild(but4).textContent=multipleChoice[list][3];  
+  but1.textContent = multipleChoice[list][0];
+  but2.textContent = multipleChoice[list][1];
+  but3.textContent = multipleChoice[list][2];
+  but4.textContent = multipleChoice[list][3];
 }
 
 // linked to statement section to show the response for the answer (correct or incorrect)
-var statmentOfanswer = document.querySelector(".statement");
+
+var responseAnswer = document.getElementById("response-answ");
 
 // Clocking the time
-
+var scoreState = document.getElementById("score-state");
 var timer;
 var isWin = false;
 
@@ -126,24 +123,24 @@ function startTimer() {
     // If timer or question has run out    
     if (timerCount === 0 || questionLength==5) {
       clearInterval(timer);
+      quizArea.setAttribute("style","display: none");
+      quizState.setAttribute("style","display:block");
       // EndGame;
-      if (timerCount ===0){
-        quizQuest.setAttribute("style","display: none");
-        quizArea.setAttribute("style","display:block");
-        quizArea.textContent="Sorry, Time up!";
+      if (timerCount ===0){        
+        scoreState.textContent="Sorry, Time up!";
       }
-      else {
-        quizQuest.setAttribute("style","display: none");
-        quizArea.setAttribute("style","display:block");
-        quizArea.textContent="You answered all the questions. Awesome!";
+      else {        
+        scoreState.textContent="You answered all the questions. Awesome!";
       };           
-      statmentOfanswer.setAttribute("style","display:none")
+      responseAnswer.setAttribute("style","display:none")
+
       // let the page show a little while before change to another
       var timerCount2 = 10;
       var timer2 = setInterval(function(){
           timerCount2--;
           if (timerCount2 === 0) {
           clearInterval(timer2);
+
           checkScore()
           }
       },100);
@@ -177,32 +174,31 @@ function but4Button(){
 
 function checkAnswer(i){    
   if(multipleChoice[quesTion][i]===correctAnswer){
-    statmentOfanswer.textContent="Correct"; // response fo correct answer
-    statmentOfanswer.setAttribute("style","display:flex")
+    responseAnswer.setAttribute("style","display:block");
+    responseAnswer.textContent="Correct"; // response for correct answer
     var timerCount2 = 3;
     var timer2 = setInterval(function(){
     timerCount2--;
     if (timerCount2 === 0) {
     clearInterval(timer2);    
-    statmentOfanswer.setAttribute("style","display:none")
+    responseAnswer.setAttribute("style","display:none"); // make it disappear that it will not confuse with coming up questions
       }
     },100);
     isCorrect=true;
     winCount = winCount+10; // if answer is correct, add 10 
   }
   else {
-    statmentOfanswer.textContent="Nice try, incorrect"; // response for incorrect answer
-    statmentOfanswer.setAttribute("style","display:flex")
+    responseAnswer.setAttribute("style","display:block");
+    responseAnswer.textContent="Nice try, incorrect"; // response for incorrect answer
     var timerCount2 = 3;
     var timer2 = setInterval(function(){
     timerCount2--;
     if (timerCount2 === 0) {
     clearInterval(timer2);    
-    statmentOfanswer.setAttribute("style","display:none")
+    responseAnswer.setAttribute("style","display:none");// hide it when another questions come up
       }
     },100);
-    timerCount = timerCount-10; // if answer is wrong, deduct 10 sec
-    timerElement.textContent = timerCount;    
+    timerCount = timerCount-10; // if answer is wrong, deduct 10 sec    
   };
   questionLength++;
 // a little time to read response before disappear
@@ -218,56 +214,49 @@ function checkAnswer(i){
 }
 
 // 3. Display the total scores and text-box for user to record the name
-
-var quizQuest = document.querySelector(".quiz-state");
 var textInputBox = document.createElement("input","type=text");
 var inputText = "";
 var saveButton = document.createElement("button");
 
 function checkScore(){  
-  quizArea.textContent="Your score is " + winCount+".";  
+  scoreState.textContent="Your score is " + winCount+".";  
   var labelBox = document.createElement("form");
   labelBox.textContent="Enter initials  :  ";
   labelBox.setAttribute = ("style","font-size:small");  
-  quizArea.appendChild(labelBox);
+  quizState.appendChild(labelBox);
   labelBox.appendChild(textInputBox);
   saveButton.textContent="Save";
-  quizArea.appendChild(saveButton);  
+  quizState.appendChild(saveButton);  
 }
 
 saveButton.addEventListener("click",function(){
-  inputText = textInputBox.value.trim();
+  inputText = textInputBox.value;
   if (inputText === "") {
     return;
-  }
+  }  
   setListBoard();
 });
 
-function setListBoard(){
-  quizArea.setAttribute("style","display:none");
+function setListBoard(){  
   var highScoreName = ["1. "+inputText,"\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0",winCount];
   localStorage.setItem("Highestscore", JSON.stringify(highScoreName));
   recordHigh()
   textInputBox.value="";
+  quizState.setAttribute("style","display:none");
 }
 
 // 4. Show the name and the score of user
 
-var scoreBoard=document.querySelector(".score-board");
-
-var subTitle = document.getElementById("title-scoreboard");
 var showScore = document.getElementById("show-scores");
 var backButn = document.getElementById("back");
 var resetButton = document.getElementById("reset");
 
-function recordHigh() {
+function recordHigh () {
   header.setAttribute("style","display:none")
-  scoreBoard.setAttribute("style","display: block");
+  scoreBoard.setAttribute("style","display:block");
   var getLastScore=JSON.parse(localStorage.getItem("Highestscore"));
   if (getLastScore!==null){
   showScore.textContent = getLastScore.join(" ");
-  } else {
-    return;
   }
 }
 
@@ -275,6 +264,7 @@ function recordHigh() {
 backButn.addEventListener("click",function(){  
   init()
   header.setAttribute("style","display:flex");
+  highScore.setAttribute("style","display: block");
   scoreBoard.setAttribute("style","display: none");  
 });
 

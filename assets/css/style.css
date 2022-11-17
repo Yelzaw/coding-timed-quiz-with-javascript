@@ -52,13 +52,16 @@
 
   .but-format{
     width:auto; 
+    height: 40px;
+    font-size: 20px;
     margin:10px; 
     display:block; 
     text-align: left
+    
   }
   
   #response-answ {
-    font-size: 50%;
+    font-size: 100%;
     text-align: left;
     padding-left:10px;
   }
@@ -79,7 +82,9 @@
   }
 
   .start-button {
-    width: 100px;
+    width: 30%;
+    height: 80px;
+    font-size: 30px;
   }
 
   .score-button {
